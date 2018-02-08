@@ -1,0 +1,47 @@
+<?php
+$form->prepare();
+$escapeHtml = $this->plugin('escapeHtml');
+$this->htmlElement('body')->appendAttribute('class', 'no-section-hashes csvimporter jobs undo');
+$this->headStyle()->appendStyle('.inputs input.value-language.active[type="text"] { background-color: #fff; padding: 0 5px; display: inherit; }');
+$this->headLink()->appendStylesheet($this->assetUrl('css/csvimport.css', 'OaiPmhHarvester'));
+$this->headScript()->appendFile($this->assetUrl('js/resource-form.js', 'Omeka'));
+$this->headScript()->appendFile($this->assetUrl('js/csvimport.js', 'OaiPmhHarvester'));
+
+$pageTitle = sprintf($this->translate('Select sets and format for %s'), $base_url);
+
+?>
+<?php echo $this->pageTitle($pageTitle, 1, $this->translate('OAI-PMH Harvester')); ?>
+<?php echo $this->form()->openTag($form); ?>
+<fieldset id='page-actions'>
+    <button type="submit"><?php echo $this->translate('Map to Omeka S Data'); ?></button>
+</fieldset>
+<nav class="section-nav">
+    <ul>
+        <li class="active"><a href="#select-sets"><?php echo $this->translate('Select Sets to Import'); ?></a></li>
+    </ul>
+</nav>
+<fieldset id="select-sets" class="section active">
+    <?php echo $this->formCollection($form, false); ?>
+    <input type="hidden" name="source" value="<?php echo $base_url ?>">
+    <table class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+        <thead>
+            <tr>
+                <th><?php echo $this->translate("Set ID"); ?></th>
+                <th><?php echo $this->translate("Set Name"); ?></th>
+                <th><?php echo $this->translate("Include in harvest?"); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach( $oai_sets['sets']->set as $set ) : ?>
+            <tr>
+                <td><label for="<?php printf( 'select-%s', $set->setSpec) ?>"><?php echo $set->setSpec ?></label></td>
+                <td><label for="<?php printf( 'select-%s', $set->setSpec) ?>"><?php echo $set->setName ?></label></td>
+                <td><input type="checkbox" id="<?php printf( 'select-%s', $set->setSpec) ?>" name="sets[<?php echo $set->setSpec ?>]" value="<?php echo $set->setSpec ?>"></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</fieldset>
+
+<fieldset id="mapping-data" class="section"></fieldset>
+<?php echo $this->form()->closeTag($form); ?>

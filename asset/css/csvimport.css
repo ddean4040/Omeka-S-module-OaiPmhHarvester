@@ -1,0 +1,142 @@
+.csv-import-fieldset-label {
+    display: block;
+    border-color: rgba(0, 0, 0, 0.08);
+    border-bottom-width: 0.1875em;
+    border-bottom-style: solid;
+    padding-bottom: 0.1875em;
+    margin-bottom: 0.375em;
+    font-size: 125%;
+}
+
+.csv-import-fieldset-label .collapse,
+.csv-import-fieldset-label .expand {
+    display: block;
+    float: right;
+}
+
+#mapping-data td:first-of-type {
+    padding: 9px .5em;
+}
+
+#mapping-data td:nth-of-type(3) {
+    padding: 0 .5em;
+}
+
+tr.active {
+    background-color: rgba(0,0,0, .08);
+}
+
+tr.mappable td:first-child {
+    max-width: 20%;
+}
+
+tr.mappable td:nth-of-type(3) label {
+    margin: 0 1em .375em 0;
+    display: inline-block;
+}
+
+tr.mappable input[type="checkbox"] {
+    margin-right: .5em;
+}
+
+td.comment {
+    max-width: 300px;
+}
+
+ul.mappings.elements {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar ul {
+    padding-left: 0;
+}
+
+ul.options {
+    padding: unset;
+}
+
+ul.options li {
+    display: flex;
+}
+
+li {
+    list-style: none;
+}
+
+li.mapping {
+    display: flex;
+}
+
+li.mapping.delete {
+    background-color: #fcc;
+}
+
+li.option.delete {
+    background-color: #fcc;
+}
+
+.sidebar a.button {
+    width: 100%
+}
+
+.sidebar-chooser li {
+    display: inline-block;
+}
+
+.sidebar-chooser a.button {
+    font-size: 13px;
+    margin: 3px 0;
+    width: 100px;
+}
+
+#resource-data a,
+#property-selector a,
+#media-source a {
+    text-align: left;
+}
+
+#select-item-set {
+    height: 100px;
+}
+
+.sidebar .options {
+    margin-top: 10px;
+
+}
+
+.sidebar .options p {
+    margin: 3px;
+}
+
+input.value-language[type="text"] {
+    display: block;
+    margin: 3px;
+}
+
+div.language.options {
+    padding-left: 12px;
+}
+
+li.column-multivalue {
+    display: flex;
+}
+
+.resource-mapping li.column-multivalue {
+    display: block;
+}
+
+#automap_user_list {
+    max-height: inherit;
+}
+
+.csv-import-job-param,
+.csv-import-job-log {
+    font-size: smaller;
+    font-style: italic;
+}
+
+.csvimporter.jobs td ul {
+    padding-left: 0;
+}

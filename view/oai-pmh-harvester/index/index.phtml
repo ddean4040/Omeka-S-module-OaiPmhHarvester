@@ -1,0 +1,105 @@
+<?php
+$this->htmlElement('body')->appendAttribute('class', 'csvimporter jobs undo');
+$escape = $this->plugin('escapeHtml');
+$this->headLink()->appendStylesheet($this->assetUrl('css/csvimport.css', 'OaiPmhHarvester'));
+?>
+
+<?php echo $this->pageTitle($this->translate('Harvests'), 1, $this->translate('OAI-PMH Harvester')); ?>
+<?php if(empty($imports)): ?>
+<p>No harvest records were found.</p>
+<?php else: ?>
+<?php echo $this->pagination(); ?>
+
+<form method='POST'>
+    <fieldset id='page-actions'>
+        <input type="submit" value="<?php echo $escape($this->translate('Undo Harvest')); ?>" />
+    </fieldset>
+    <table class="tablesaw" data-tablesaw-mode="stack">
+        <thead>
+            <tr>
+                <th>
+                    <span style="margin: 0 12px"></span>
+                    <?php echo $this->sortLink($escape($this->translate('Date')), 'id');?>
+                </th>
+                <th><?php echo $escape($this->translate('Action'));?></th>
+                <th><?php echo $escape($this->translate('Comment'));?></th>
+                <th><?php echo $escape($this->translate('Result'));?></th>
+                <th><?php echo $escape($this->translate('Status'));?></th>
+                <th><?php echo $escape($this->translate('Owner'));?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($imports as $import): ?>
+        <?php $job = $import->job(); ?>
+        <?php $undoJob = $import->undoJob(); ?>
+        <?php $jobArgs = $job->args(); ?>
+        <?php $isCreate = @$jobArgs['action'] === \OaiPmhHarvester\Job\Import::ACTION_CREATE; ?>
+        <tr class="<?php echo $undoJob ? 'undone' : ''; ?>" >
+            <td>
+                <input type="checkbox" name="jobs[]" value="<?php echo $job->id(); ?>"<?php if (!$isCreate || $undoJob) echo ' disabled="disabled"'; ?>/>
+                <?php echo $escape($this->i18n()->dateFormat($job->started())); ?>
+            </td>
+            <td>
+                <span class="csv-import-action">
+                    <?php echo $escape($this->translate(ucfirst(@$jobArgs['action'] ?: 'create'))); ?>
+                </span>
+                <br />
+                <span class="csv-import-job-param">
+                    <?php echo $this->hyperlink($this->translate('Parameters'), $this->url('admin/id', ['controller' => 'job', 'action' => 'show', 'id' => $job->id()])); ?>
+                </span>
+                <?php if ($job->log()): ?>
+                /
+                <span class="csv-import-job-log">
+                    <?php echo $this->hyperlink($this->translate('Log'), $this->url('admin/id', ['controller' => 'job', 'action' => 'log', 'id' => $job->id()]), ['target' => '_blank']); ?>
+                </span>
+                <?php endif; ?>
+            </td>
+            <td class='comment'>
+                <?php echo $import->comment(); ?>
+                <?php if ($import->hasErr()): ?>
+                    <p><?php echo $escape($this->translate("Problems were detected with the import. Check the job's log for details.")); ?></p>
+                <?php endif; ?>
+            </td>
+            <td>
+                <ul>
+                <?php if( ! empty( $import->stats() ) ) : ?>
+                <?php foreach ($import->stats() as $process => $stat): ?>
+                <?php foreach ($stat as $resourceType => $count): ?>
+                    <li><?php echo $escape(sprintf('%s: %d %s', $this->translate(ucfirst($process)), $count, $this->translate(str_replace('_', ' ', $resourceType)))); ?></li>
+                <?php endforeach; ?>
+                <?php endforeach; ?>
+                <?php endif; ?>
+                </ul>
+            </td>
+            <td>
+            <?php if ($undoJob):
+                if ($undoJob->ended()):
+                    echo $escape(sprintf($this->translate('Undone %s'), $this->i18n()->dateFormat($undoJob->ended())));
+                ?>
+                <?php
+                else:
+                    echo $escape($this->translate('Undo in progress'));
+                endif;
+                ?>
+                <span class="csv-import-job-param">
+                    <?php echo $this->hyperlink($this->translate('Parameters'), $this->url('admin/id', ['controller' => 'job', 'action' => 'show', 'id' => $undoJob->id()])); ?>
+                </span>
+                <?php if ($undoJob->log()): ?>
+                /
+                <span class="csv-import-job-log">
+                    <?php echo $this->hyperlink($this->translate('Log'), $this->url('admin/id', ['controller' => 'job', 'action' => 'log', 'id' => $undoJob->id()]), ['target' => '_blank']); ?>
+                </span>
+                <?php endif; ?>
+            <?php
+            else:
+                echo $escape($this->translate($job->status()));
+            endif;
+            ?>
+            </td>
+            <td><?php echo $this->hyperlink($job->owner()->name(), $this->url('admin/id', array('controller' => 'user', 'action' => 'show', 'id' => $job->owner()->id()))); ?></td>
+        </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</form>
+<?php endif; ?>

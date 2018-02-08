@@ -1,0 +1,17 @@
+<?php
+$this->htmlElement('body')->appendAttribute('class', 'csvimporter jobs undo');
+$form->prepare();
+$escapeHtml = $this->plugin('escapeHtml');
+$this->headLink()->appendStylesheet($this->assetUrl('css/csvimport.css', 'OaiPmhHarvester'));
+$this->headScript()->appendFile($this->assetUrl('js/csvimport.js', 'OaiPmhHarvester'));
+?>
+
+<?php echo $this->pageTitle($this->translate('New Harvest'), 1, $this->translate('OAI-PMH Harvester')); ?>
+
+<?php echo $this->form()->openTag($form); ?>
+<fieldset id='page-actions'>
+    <button type="submit"><?php echo $this->translate('Next'); ?></button>
+</fieldset>
+<?php echo $this->formCollection($form, false); ?>
+
+<?php echo $this->form()->closeTag($form); ?>

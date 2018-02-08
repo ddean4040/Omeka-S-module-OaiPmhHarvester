@@ -1,0 +1,1 @@
+Files in this dir taken / adapted from the OaipmhHarvester plugin for Omeka 2.x
